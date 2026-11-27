@@ -10069,7 +10069,7 @@ impl Host {
         groups
     }
 
-    fn query_video_memory_groups(&self) -> [Option<DXGI_QUERY_VIDEO_MEMORY_INFO>; 2] {
+    pub(crate) fn query_video_memory_groups(&self) -> [Option<DXGI_QUERY_VIDEO_MEMORY_INFO>; 2] {
         [DXGI_MEMORY_SEGMENT_GROUP_LOCAL, DXGI_MEMORY_SEGMENT_GROUP_NON_LOCAL].map(|segment| {
             let mut info = DXGI_QUERY_VIDEO_MEMORY_INFO::default();
             // SAFETY: DXGI writes the result to the live structure.

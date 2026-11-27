@@ -377,6 +377,22 @@ pub(crate) fn memory() -> [u64; 2] {
     [lock(&TEXTURES).blocks() as u64 * (BLOCK >> 20), lock(&STAGING).blocks() as u64 * (BLOCK >> 20)]
 }
 
+/// Texture heap bytes allocated and bytes in wholly free heaps. Skip a busy
+/// pool so baseline sampling can continue during allocation and residency waits.
+#[cfg(feature = "diagnostics")]
+pub(crate) fn sample_texture_blocks() -> Option<(u64, u64)> {
+    let pool = TEXTURES.try_lock().ok()?;
+    let mut total = 0;
+    let mut empty = 0;
+    for block in pool.blocks.iter().flatten() {
+        total += BLOCK;
+        if block.free.whole(BLOCK) {
+            empty += BLOCK;
+        }
+    }
+    Some((total, empty))
+}
+
 /// Part of a block of mapped upload memory, back in the pool when dropped.
 pub(crate) struct StagingPiece(Piece);
 
