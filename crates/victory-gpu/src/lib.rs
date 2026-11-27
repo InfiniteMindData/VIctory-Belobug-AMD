@@ -45,6 +45,10 @@ pub mod fence;
 pub mod frame;
 #[cfg(all(windows, feature = "diagnostics"))]
 mod book;
+#[cfg(all(windows, feature = "diagnostics"))]
+mod baseline;
+#[cfg(all(windows, feature = "diagnostics"))]
+pub use baseline::start_baseline;
 #[cfg(windows)]
 mod host;
 #[cfg(windows)]

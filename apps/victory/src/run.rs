@@ -56,6 +56,10 @@ pub fn run(
     }
     // A title that relaunched itself: the old process must be gone first.
     victory_hle::modules::lifecycle::wait_for_previous();
+    #[cfg(feature = "diagnostics")]
+    if execute {
+        victory_hle::start_baseline();
+    }
     let cfg = victory_core::Config::load()?;
     let fsr = fsr_4k::FsrPreset::requested()?;
     let original = std::fs::read(exe).with_context(|| format!("reading {}", exe.display()))?;
